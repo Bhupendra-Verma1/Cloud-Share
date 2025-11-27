@@ -40,7 +40,7 @@ const PricingSection = ({ pricingPlans, openSignUp }) => {
                                     {plan.features.map((feature, index) => (
                                         <li key={index} className="flex items-start">
                                             <div className="shrink-0">
-                                                <Check className="h-5 w-5 text-purple-500"/>
+                                                <Check className="h-5 w-5 text-purple-500" />
                                             </div>
                                             <p className="ml-3 text-base text-gray-700">
                                                 {feature}
@@ -49,7 +49,7 @@ const PricingSection = ({ pricingPlans, openSignUp }) => {
                                     ))}
                                 </ul>
                                 <div className="rounded-md shadow">
-                                    <button 
+                                    <button
                                         onClick={() => openSignUp()}
                                         className={`w-full flex items-center justity-center px-5 py-3 border border-transparent text-base font-medium rounded-md ${plan.highlighted ? "text-white bg-purple-500 hover:bg-purple-600" : "text-purple-600 bg-white hover:bg-gray-50 border-purple-500"} transition-colors duration-200`}
                                     >
