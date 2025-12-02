@@ -32,7 +32,7 @@ export const UserCreditsProvider = ({children}) => {
         } catch (error) {
             console.log("Error fetching the user credits", error);
         } finally {
-            setLoader(false);
+            setLoading(false);
         }
     }, [getToken, isSignedIn]);
 
