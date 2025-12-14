@@ -132,7 +132,7 @@ const Dashboard = () => {
             setUploading(false);
         }
     };
-
+    
     return (
         <DashboardLayout activeMenu="Dashboard">
             <div className="p-6">

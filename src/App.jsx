@@ -9,6 +9,7 @@ import Subscription from "./pages/Subscription"
 import { SignedIn, RedirectToSignIn, SignedOut } from "@clerk/clerk-react"
 import { Toaster } from "react-hot-toast";
 import { UserCreditsProvider } from './context/UserCreditsContext';
+import NotFound from './pages/NotFound'
 
 const App = () => {
     return (
@@ -52,7 +53,11 @@ const App = () => {
                             <PublicFileView />
                         </>
                     } />
-                    <Route path="/*" element={<RedirectToSignIn />} />
+                    <Route path="/*" element={
+                        <>
+                            <NotFound />
+                        </>
+                    } />
                 </Routes>
             </BrowserRouter>
         </UserCreditsProvider>
