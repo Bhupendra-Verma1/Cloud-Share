@@ -30,7 +30,6 @@ const MyFiles = () => {
     const fetchFiles = async () => {
         try {
             const token = await getToken({ template: "backend" });
-            console.log(token);
             const response = await axios.get(apiEndpoints.FETCH_FILES, {
                 headers: {
                     Authorization: `Bearer ${token}`
