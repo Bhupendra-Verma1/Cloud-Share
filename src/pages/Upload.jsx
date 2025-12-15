@@ -3,7 +3,7 @@ import DashboardLayout from "../layout/DashboardLayout";
 import { useAuth } from "@clerk/clerk-react";
 import { UserCreditContext } from "../context/UserCreditsContext";
 import { AlertCircle } from "lucide-react";
-import { apiEndpoints } from "../util/ApiEndpoint";
+import { apiEndpoints } from "../util/ApiEndpoint.js";
 import axios from "axios";
 import UploadBox from '../components/UploadBox';
 

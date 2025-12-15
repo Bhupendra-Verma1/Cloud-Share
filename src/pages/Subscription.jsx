@@ -3,7 +3,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { useAuth, useUser } from "@clerk/clerk-react";
 import { UserCreditContext } from "../context/UserCreditsContext.jsx";
 import axios from "axios";
-import { apiEndpoints } from "../util/ApiEndpoint";
+import { apiEndpoints } from "../util/ApiEndpoint.js";
 import { AlertCircle, Check, CreditCard, Loader2 } from "lucide-react";
 
 const Subscription = () => {

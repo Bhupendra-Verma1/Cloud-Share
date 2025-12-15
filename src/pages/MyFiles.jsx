@@ -6,7 +6,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import FileCard from "../components/FileCard";
-import { apiEndpoints } from "../util/ApiEndpoint";
+import { apiEndpoints } from "../util/ApiEndpoint.js";
 import ConfirmationDialog from "../components/ConfirmationDialog";
 import LinkShareModal from "../components/LinkShareModal";
 
