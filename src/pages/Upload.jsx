@@ -7,6 +7,7 @@ import { apiEndpoints } from "../util/ApiEndpoint";
 import axios from "axios";
 import UploadBox from '../components/UploadBox';
 
+
 const Upload = () => {
     const [files, setFiles] = useState([]);
     const [uploading, setUploading] = useState(false);
