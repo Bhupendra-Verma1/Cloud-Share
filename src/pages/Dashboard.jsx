@@ -3,7 +3,7 @@ import { useAuth } from "@clerk/clerk-react";
 import { useContext, useEffect, useState } from "react";
 import { UserCreditContext } from "../context/UserCreditsContext";
 import axios from "axios";
-import { apiEndpoints } from "../util/ApiEndpoint";
+import { apiEndpoints } from "../util/ApiEndpoint.js";
 import { Loader2 } from "lucide-react";
 import DashboardUpload from '../components/DashboardUpload.jsx';
 import RecentFiles from '../components/RecentFiles.jsx';
