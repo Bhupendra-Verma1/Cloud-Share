@@ -148,7 +148,7 @@ const Dashboard = () => {
                 )}
                 <div className="flex flex-col lg:flex-row gap-6">
                     {/*Left column*/}
-                    <div className="w-[80%] lg:w-[35%]">
+                    <div className="w-[78%] lg:w-[35%]">
                         <DashboardUpload
                             files={uploadFiles}
                             onFileChange={handleFileChange}
@@ -160,7 +160,7 @@ const Dashboard = () => {
                     </div>
 
                     {/*right column*/}
-                    <div className="w-[80%] lg:w-[60%] xl:w-[62%] 2xl:w-[65%]">
+                    <div className="w-[78%] lg:w-[60%] xl:w-[62%] 2xl:w-[65%]">
                         {loading ? (
                             <div className="bg-white rounded-lg shadow p-8 flex flex-col items-center justify-center min-h-[300px]">
                                 <Loader2 size={40} className="text-purple-500 animate-spin mb-4" />
