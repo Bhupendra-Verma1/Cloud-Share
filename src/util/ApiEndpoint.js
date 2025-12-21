@@ -1,4 +1,5 @@
 const BASE_URL = "https://cloudshareapi-n9zo.onrender.com";
+// const BASE_URL = "http://localhost:8080/api/v1.0";
 
 export const apiEndpoints = {
     FETCH_FILES: `${BASE_URL}/files/my`,
