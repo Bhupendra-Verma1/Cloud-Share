@@ -52,8 +52,8 @@ const RecentFiles = ({ files }) => {
 
             <div className="bg-white rounded-lg shadow">
                 {/* TABLE SCROLL CONTAINER */}
-                <div className="overflow-x-scroll">
-                    <table className="min-w-[500px] w-full">
+                <div className="overflow-x-auto">
+                    <table className="min-w-full">
                         <thead className="bg-gray-50 text-xs font-medium text-gray-500 uppercase tracking-wider">
                             <tr>
                                 <th className="px-4 py-3 text-left">Name</th>

@@ -60,7 +60,7 @@ const FileCard = ({ file, onDelete, onTogglePublic, onDownload, onShareLink }) =
             </div>
 
             {/* File info */}
-            <div className="p-6">
+            <div className="p-2 sm:p-4 md:p-6">
                 <div className="flex justify-between items-start">
                     <div className="overflow-hidden">
                         <h3 title={file.name} className="font-medium text-gray-900 truncate">

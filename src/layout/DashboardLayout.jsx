@@ -2,23 +2,27 @@ import { useUser } from "@clerk/clerk-react";
 import Navbar from "../components/Navbar";
 import SideMenu from "../components/SideMenu";
 
-const DashboardLayout = ({children, activeMenu}) => {
-    const {user} = useUser();
+const DashboardLayout = ({ children, activeMenu }) => {
+    const { user } = useUser();
+
     return (
-        <div>
-            {/* Navbar component goes here */}
-            <Navbar activeMenu={activeMenu}/>
+        <div className="overflow-x-hidden">
+            <Navbar activeMenu={activeMenu} />
+
             {user && (
                 <div className="flex">
-                    <div className="max-[1080px]:hidden">
-                        {/* sidemenu goes here */}
-                        <SideMenu activeMenu={activeMenu}/>
+                    <div className="hidden min-[1080px]:block">
+                        <SideMenu activeMenu={activeMenu} />
                     </div>
-                    <div className="grow mx-5">{children}</div>
+
+                    <div className="flex-1 min-w-0 px-3 sm:px-5 md:px-8">
+                        {children}
+                    </div>
                 </div>
             )}
         </div>
-    )
-}
+    );
+};
+
 
 export default DashboardLayout;

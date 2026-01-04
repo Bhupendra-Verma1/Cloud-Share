@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import DashboardLayout from "../layout/DashboardLayout";
-import {File, Grid, List, FileIcon, FileText, Image, Music, Video, Globe, Lock, Copy, Eye, Download, Trash2 } from "lucide-react";
+import { File, Grid, List, FileIcon, FileText, Image, Music, Video, Globe, Lock, Copy, Eye, Download, Trash2 } from "lucide-react";
 import { useAuth } from "@clerk/clerk-react";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -9,6 +9,7 @@ import FileCard from "../components/FileCard";
 import { apiEndpoints } from "../util/ApiEndpoint.js";
 import ConfirmationDialog from "../components/ConfirmationDialog";
 import LinkShareModal from "../components/LinkShareModal";
+import MyFileMobileView from "../components/MyFileMobileView";
 
 const MyFiles = () => {
     const [files, setFiles] = useState([]);
@@ -16,14 +17,14 @@ const MyFiles = () => {
     const { getToken } = useAuth();
     const navigate = useNavigate();
     const [deleteConfirmation, setDeleteConfirmation] = useState({
-        isOpen : false,
-        fileId : null
+        isOpen: false,
+        fileId: null
     });
 
     const [shareModel, setShareModel] = useState({
-        isOpen : false,
-        fileId : null,
-        link : ""
+        isOpen: false,
+        fileId: null,
+        link: ""
     });
 
     // fetching the files for a logged in user
@@ -48,13 +49,13 @@ const MyFiles = () => {
     // Toggles the public/private status of a file
     const togglePublic = async (fileToUpdate) => {
         try {
-            const token = await getToken({template : "backend"});
+            const token = await getToken({ template: "backend" });
             await axios.patch(apiEndpoints.TOGGLE_FILE(fileToUpdate.id), {}, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             })
-            setFiles(files.map((file) => file.id === fileToUpdate.id ? {...file, isPublic : !file.isPublic} : file));
+            setFiles(files.map((file) => file.id === fileToUpdate.id ? { ...file, isPublic: !file.isPublic } : file));
         } catch (error) {
             console.log('Error toggling file status: ', error);
             toast.error('Error toggling file status: ', error.message);
@@ -64,13 +65,13 @@ const MyFiles = () => {
     // handle file download
     const handDownload = async (file) => {
         try {
-            const token = await getToken({template : "backend"});
+            const token = await getToken({ template: "backend" });
             const response = await axios.get(apiEndpoints.DOWNLOAD_FILE(file.id), {
-                    headers : {
-                        Authorization: `Bearer ${token}`,
-                    },
-                    responseType : 'blob'
-                }
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                responseType: 'blob'
+            }
             )
 
             //create a blob url and trigger download
@@ -91,16 +92,16 @@ const MyFiles = () => {
     // Closes the delete confirmation
     const closeDeleteConfirmation = () => {
         setDeleteConfirmation({
-            isOpen : false,
-            fileId : null
+            isOpen: false,
+            fileId: null
         })
     }
 
     // Opens the delete confirmation model
     const openDeleteConfirmation = (fileId) => {
         setDeleteConfirmation({
-            isOpen : true,
-            fileId : fileId
+            isOpen: true,
+            fileId: fileId
         })
     }
 
@@ -108,7 +109,7 @@ const MyFiles = () => {
     const openShareModel = (fileId) => {
         const link = `${window.location.origin}/file/${fileId}`;
         setShareModel({
-            isOpen : true,
+            isOpen: true,
             fileId,
             link
         });
@@ -117,25 +118,25 @@ const MyFiles = () => {
     // Close the share link model
     const closeShareModel = () => {
         setShareModel({
-            isOpen : false,
-            fileId : null,
-            link : ""
+            isOpen: false,
+            fileId: null,
+            link: ""
         });
     }
 
     // Delete a file after confirmation
     const handleDelete = async () => {
         const fileId = deleteConfirmation.fileId;
-        if(!fileId) return;
+        if (!fileId) return;
 
         try {
-            const token = await getToken({template : "backend"});
+            const token = await getToken({ template: "backend" });
             const response = await axios.delete(apiEndpoints.DELETE_FILE(fileId), {
                 headers: {
-                    Authorization : `Bearer ${token}`
+                    Authorization: `Bearer ${token}`
                 }
             });
-            if(response.status === 204) {
+            if (response.status === 204) {
                 setFiles(files.filter((file) => file.id !== fileId));
                 closeDeleteConfirmation();
             } else {
@@ -175,8 +176,8 @@ const MyFiles = () => {
 
     return (
         <DashboardLayout activeMenu={"My Files"}>
-            <div className="p-6">
-                <div className="flex justify-between items-center mb-6">
+            <div className="p-2 sm:p-4 md:p-6">
+                <div className="flex justify-between items-center gap-3 mb-6">
                     <h2 className="text-2xl font-bold">My Files {files.length}</h2>
                     <div className="flex items-center gap-3">
                         <List
@@ -193,7 +194,7 @@ const MyFiles = () => {
                 </div>
 
                 {files.length === 0 ? (
-                    <div className="bg-white rounded-lg shadow p-12 flex flex-col items-center justify-center">
+                    <div className="bg-white rounded-lg shadow p-6 sm:p-10 md:p-12 flex flex-col items-center justify-center">
                         <File
                             size={60}
                             className="text-purple-300 mb-4"
@@ -211,11 +212,11 @@ const MyFiles = () => {
                         </button>
                     </div>
                 ) : viewMode === 'grid' ? (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
                         {files.map((file) => (
-                            <FileCard 
-                                key={file.id} 
-                                file={file} 
+                            <FileCard
+                                key={file.id}
+                                file={file}
                                 onDelete={openDeleteConfirmation}
                                 onTogglePublic={togglePublic}
                                 onDownload={handDownload}
@@ -224,103 +225,120 @@ const MyFiles = () => {
                         ))}
                     </div>
                 ) : (
-                    <div className="overflow-x-auto bg-white rounded-lg shadow">
-                        <table className="min-w-full">
-                            <thead className="bg-gray-50 border-b border-gray-200">
-                                <tr>
-                                    <th className="px-6 py-3 text-left text-xs font-medium font-gray-500 uppercase tracking-wider">Name</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium font-gray-500 uppercase tracking-wider">Size</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium font-gray-500 uppercase tracking-wider">Uploaded</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium font-gray-500 uppercase tracking-wider">Sharing</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium font-gray-500 uppercase tracking-wider">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-gray-200">
-                                {files.map((file) => (
-                                    <tr key={file.id} className="hover:bg-gray-50 transition-colors">
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">
-                                            <div className="flex items-center gap-2">
-                                                {getFileIcon(file)}
-                                                {file.name}
-                                            </div>
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-600">
-                                            {(file.size / 1024).toFixed(1)} KB
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-600">
-                                            {new Date(file.uploadedAt).toLocaleDateString()}
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-600">
-                                            <div className="flex items-center gap-4">
-                                                <button
-                                                    onClick={() => togglePublic(file)}
-                                                    className="flex items-center gap-2 cursor-pointer group">
-                                                    {file.isPublic ? (
-                                                        <>
-                                                            <Globe size={16} className="text-green-500" />
-                                                            <span className="group-hover:underline">
-                                                                Public
-                                                            </span>
-                                                        </>
-                                                    ) : (
-                                                        <>
-                                                            <Lock size={16} className="text-gray-500" />
-                                                            <span className="group-hover:underline">
-                                                                Private
-                                                            </span>
-                                                        </>
-                                                    )}
-                                                </button>
-                                                {file.isPublic && (
-                                                    <button 
-                                                        onClick={() => openShareModel(file.id)}
-                                                        className="flex items-center gap-2 cursor-pointer group text-blue-600">
-                                                        <Copy size={16} />
-                                                        <span className="group-hover:underline">
-                                                            Share Link
-                                                        </span>
-                                                    </button>
-                                                )}
-                                            </div>
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                            <div className="grid grid-cols-3 gap-4">
-                                                <div className="flex justify-center">
-                                                    <button
-                                                        onClick={() => handDownload(file)}
-                                                        title="Download"
-                                                        className="text-gray-500 hover:text-blue-600"
-                                                    >
-                                                        <Download size={18} />
-                                                    </button>
-                                                </div>
-                                                <div className="flex justify-center">
-                                                    <button
-                                                        onClick={() => openDeleteConfirmation(file.id)}
-                                                        title="Delete"
-                                                        className="text-gray-500 hover:text-red-600">
-                                                        <Trash2 size={18} />
-                                                    </button>
-                                                </div>
-                                                <div className="flex justify-center">
-                                                    {file.isPublic ? (
-                                                        <a href={`/file/${file.id}`} title="View File" target="_blank" rel="noreferrer" className="text-gray-500 hover:text-blue-600">
-                                                            <Eye size={18} />
-                                                        </a>
-                                                    ) : (
-                                                        <span className="w-[18px]"></span>
-                                                    )}
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                    <>
+                        {/* Desktop Table */}
+                        <div className="hidden md:block">
+                            <div className="overflow-x-auto bg-white rounded-lg shadow">
+                                <table className="min-w-full">
+                                    <thead className="bg-gray-50 border-b border-gray-200">
+                                        <tr>
+                                            <th className="px-3 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
+                                            <th className="px-3 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Size</th>
+                                            <th className="px-3 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Uploaded</th>
+                                            <th className="px-3 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Sharing</th>
+                                            <th className="px-3 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-gray-200">
+                                        {files.map((file) => (
+                                            <tr key={file.id} className="hover:bg-gray-50 transition-colors">
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">
+                                                    <div className="flex items-center gap-2">
+                                                        {getFileIcon(file)}
+                                                        {file.name}
+                                                    </div>
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-600">
+                                                    {(file.size / 1024).toFixed(1)} KB
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-600">
+                                                    {new Date(file.uploadedAt).toLocaleDateString()}
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-600">
+                                                    <div className="flex items-center gap-4">
+                                                        <button
+                                                            onClick={() => togglePublic(file)}
+                                                            className="flex items-center gap-2 cursor-pointer group">
+                                                            {file.isPublic ? (
+                                                                <>
+                                                                    <Globe size={16} className="text-green-500" />
+                                                                    <span className="group-hover:underline">
+                                                                        Public
+                                                                    </span>
+                                                                </>
+                                                            ) : (
+                                                                <>
+                                                                    <Lock size={16} className="text-gray-500" />
+                                                                    <span className="group-hover:underline">
+                                                                        Private
+                                                                    </span>
+                                                                </>
+                                                            )}
+                                                        </button>
+                                                        {file.isPublic && (
+                                                            <button
+                                                                onClick={() => openShareModel(file.id)}
+                                                                className="flex items-center gap-2 cursor-pointer group text-blue-600">
+                                                                <Copy size={16} />
+                                                                <span className="group-hover:underline">
+                                                                    Share Link
+                                                                </span>
+                                                            </button>
+                                                        )}
+                                                    </div>
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                                    <div className="grid grid-cols-3 gap-4">
+                                                        <div className="flex justify-center">
+                                                            <button
+                                                                onClick={() => handDownload(file)}
+                                                                title="Download"
+                                                                className="text-gray-500 hover:text-blue-600"
+                                                            >
+                                                                <Download size={18} />
+                                                            </button>
+                                                        </div>
+                                                        <div className="flex justify-center">
+                                                            <button
+                                                                onClick={() => openDeleteConfirmation(file.id)}
+                                                                title="Delete"
+                                                                className="text-gray-500 hover:text-red-600">
+                                                                <Trash2 size={18} />
+                                                            </button>
+                                                        </div>
+                                                        <div className="flex justify-center">
+                                                            {file.isPublic ? (
+                                                                <a href={`/file/${file.id}`} title="View File" target="_blank" rel="noreferrer" className="text-gray-500 hover:text-blue-600">
+                                                                    <Eye size={18} />
+                                                                </a>
+                                                            ) : (
+                                                                <span className="w-[18px]"></span>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        {/* Mobile view */}
+                        <div className="block md:hidden">
+                            <MyFileMobileView 
+                                files={files}
+                                getFileIcon={getFileIcon}
+                                onDownload={handDownload}
+                                onDelete={openDeleteConfirmation}
+                                onTogglePublic={togglePublic}
+                                onShareLink={openShareModel}
+                            />
+                        </div>
+                    </>
                 )}
                 {/* Delete confirmation Dialog */}
-                <ConfirmationDialog 
+                <ConfirmationDialog
                     isOpen={deleteConfirmation.isOpen}
                     onClose={closeDeleteConfirmation}
                     title="Delete File"
@@ -332,7 +350,7 @@ const MyFiles = () => {
                 />
 
                 {/* Share link model */}
-                <LinkShareModal 
+                <LinkShareModal
                     isOpen={shareModel.isOpen}
                     onClose={closeShareModel}
                     link={shareModel.link}
