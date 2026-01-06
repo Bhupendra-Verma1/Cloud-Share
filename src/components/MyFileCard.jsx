@@ -12,6 +12,7 @@ const MyFileCard = ({
     const [open, setOpen] = useState(false);
     const btnRef = useRef(null);
     const menuRef = useRef(null);
+    const [openUp, setOpenUp] = useState(false);
 
     useEffect(() => {
         const handler = (e) => {
@@ -27,6 +28,14 @@ const MyFileCard = ({
         };
     }, []);
 
+    useEffect(() => {
+        if (!open || !btnRef.current) return;
+
+        const rect = btnRef.current.getBoundingClientRect();
+        const spaceBelow = window.innerHeight - rect.bottom;
+
+        setOpenUp(spaceBelow < 200); // 200px = menu height estimate
+    }, [open]);
 
     return (
         <div className="relative w-full max-w-full grid grid-cols-[auto_1fr_auto] items-center px-4 py-3">
@@ -60,7 +69,10 @@ const MyFileCard = ({
 
             {/* Dropdown */}
             {open && (
-                <div ref={menuRef} className="absolute right-2 top-full mt-2 z-50 w-40 divide-y divide-gray-200 bg-white rounded-lg shadow">
+                <div ref={menuRef}
+                    className={`absolute right-2 z-50 w-40 divide-y divide-gray-200 bg-white rounded-lg shadow
+                    ${openUp ? "bottom-full mb-2" : "top-full mt-2"}`}
+                >
 
                     {file.isPublic && (
                         <button

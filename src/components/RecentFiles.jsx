@@ -50,8 +50,8 @@ const RecentFiles = ({ files }) => {
                 </h2>
             </div>
 
-            <div className="bg-white rounded-lg shadow">
-                {/* TABLE SCROLL CONTAINER */}
+            {/* DESKTOP TABLE */}
+            <div className="hidden md:block bg-white rounded-lg shadow">
                 <div className="overflow-x-auto">
                     <table className="min-w-full">
                         <thead className="bg-gray-50 text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -92,7 +92,7 @@ const RecentFiles = ({ files }) => {
                                     </td>
 
                                     <td className="px-4 py-3 whitespace-nowrap">
-                                        {file.public ? (
+                                        {file.isPublic ? (
                                             <div className="flex items-center text-xs text-green-600">
                                                 <Globe size={14} className="mr-1" />
                                                 Public
@@ -110,6 +110,52 @@ const RecentFiles = ({ files }) => {
                     </table>
                 </div>
             </div>
+
+            {/* MOBILE LIST – DETAILS ONLY */}
+            <div className="md:hidden bg-white rounded-lg shadow divide-y divide-gray-200">
+                {files.map((file) => (
+                    <div
+                        key={file.id}
+                        className="flex items-center justify-between gap-3 px-4 py-3"
+                    >
+                        {/* LEFT: icon + file info */}
+                        <div className="flex items-center gap-3 min-w-0">
+                            <div className="shrink-0">
+                                {getFileIcon(file.name)}
+                            </div>
+
+                            <div className="min-w-0">
+                                <p
+                                    className="text-sm font-medium text-gray-900 truncate"
+                                    title={file.name}
+                                >
+                                    {file.name}
+                                </p>
+
+                                <p className="text-xs text-gray-500 mt-0.5">
+                                    {formatFileSize(file.size)} · {formatDate(file.uploadedAt)}
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* RIGHT: sharing status only */}
+                        <div className="flex items-center gap-1 shrink-0">
+                            {file.isPublic ? (
+                                <>
+                                    <Globe size={14} className="text-green-600" />
+                                    <span className="text-xs text-green-600">Public</span>
+                                </>
+                            ) : (
+                                <>
+                                    <Lock size={14} className="text-gray-500" />
+                                    <span className="text-xs text-gray-500">Private</span>
+                                </>
+                            )}
+                        </div>
+                    </div>
+                ))}
+            </div>
+
         </div>
     );
 };
