@@ -9,7 +9,7 @@ const ConfirmationDialog = (
         confirmText = "Confirm",
         cancelText = "Cancel",
         onConfirm,
-        confirmationButtonClass = "bg-red-600 hover:bg-red-700"
+        confirmButtonClass = "bg-red-600 hover:bg-red-700"
     }
 ) => {
     return (
@@ -20,7 +20,7 @@ const ConfirmationDialog = (
             confirmText={confirmText}
             cancelText={cancelText}
             onConfirm={onConfirm}
-            confirmationButtonClass={confirmationButtonClass}
+            confirmButtonClass={confirmButtonClass}
             size="sm"
         >
             <p className="text-gray-600">{message}</p>

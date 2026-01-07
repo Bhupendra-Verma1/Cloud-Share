@@ -16,9 +16,15 @@ const MyFiles = () => {
     const [viewMode, setViewMode] = useState("list");
     const { getToken } = useAuth();
     const navigate = useNavigate();
+
     const [deleteConfirmation, setDeleteConfirmation] = useState({
         isOpen: false,
         fileId: null
+    });
+
+    const [visibilityConfirmation, setVisibilityConfirmation] = useState({
+        isOpen: false,
+        file: null
     });
 
     const [shareModel, setShareModel] = useState({
@@ -102,6 +108,22 @@ const MyFiles = () => {
         setDeleteConfirmation({
             isOpen: true,
             fileId: fileId
+        })
+    }
+
+    // open visibility confirmation model
+    const openVisibilityConfirmation = (fileToUpdate) => {
+        setVisibilityConfirmation({
+            isOpen: true,
+            file: fileToUpdate
+        })
+    }
+
+    // open visibility confirmation model
+    const closeVisibilityConfirmation = () => {
+        setVisibilityConfirmation({
+            isOpen: false,
+            file: null
         })
     }
 
@@ -257,7 +279,7 @@ const MyFiles = () => {
                                                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-600">
                                                     <div className="flex items-center gap-4">
                                                         <button
-                                                            onClick={() => togglePublic(file)}
+                                                            onClick={() => openVisibilityConfirmation(file)}
                                                             className="flex items-center gap-2 cursor-pointer group">
                                                             {file.isPublic ? (
                                                                 <>
@@ -346,7 +368,19 @@ const MyFiles = () => {
                     confirmText="Delete"
                     cancelText="Cancel"
                     onConfirm={handleDelete}
-                    confirmationButtonClass="bg-red-600 hover:bg-red-700"
+                    confirmButtonClass="bg-red-600 hover:bg-red-700"
+                />
+
+                {/* Visibility confirmation Dialog */}
+                <ConfirmationDialog
+                    isOpen={visibilityConfirmation.isOpen}
+                    onClose={closeVisibilityConfirmation}
+                    title={visibilityConfirmation.file?.isPublic ? "Make File Private" : "Make File Public"}
+                    message={`Are your sure want to ${visibilityConfirmation.file?.isPublic ? "private" : "public"} this file?`}
+                    confirmText={visibilityConfirmation.file?.isPublic ? "Make Private" : "Make Public"}
+                    cancelText="Cancel"
+                    onConfirm={() => togglePublic(visibilityConfirmation.file)}
+                    confirmButtonClass={visibilityConfirmation.file?.isPublic ? "bg-yellow-600 hover:bg-yellow-700" : "bg-green-600 hover:bg-green-700"}
                 />
 
                 {/* Share link model */}
