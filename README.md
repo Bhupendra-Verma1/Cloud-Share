@@ -47,7 +47,7 @@ CloudShare Frontend is a modern, responsive web application built with **React +
 | Language         | JavaScript        |
 | Authentication   | Clerk             |
 | Payments         | Razorpay          |
-| Styling          | CSS               |
+| Styling          | Tailwind CSS      |
 | State Management | React Context API |
 | Deployment       | Vercel            |
 
