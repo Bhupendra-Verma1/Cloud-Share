@@ -2,7 +2,7 @@ import { useState } from "react";
 import { FileIcon, FileText, Image, Music, Video, Globe, Lock, Copy, Eye, Download, Trash2, EllipsisVertical } from "lucide-react";
 import { useRef, useEffect } from "react";
 
-const FileCard = ({ file, onDelete, onTogglePublic, onDownload, onShareLink }) => {
+const FileCard = ({ file, onDelete, onTogglePublic, onDownload, onShareLink, onVisibilityChange }) => {
     const [showActions, setShowActions] = useState(false);
     const btnRef = useRef(null);
     const menuRef = useRef(null);
@@ -149,7 +149,7 @@ const FileCard = ({ file, onDelete, onTogglePublic, onDownload, onShareLink }) =
                     </button>
 
                     <button
-                        onClick={() => onTogglePublic(file)}
+                        onClick={() => onVisibilityChange(file)}
                         title={file.isPublic ? "Make Private" : "Make Public"}
                         className="p-2 bg-white/90 rounded-full hover:bg-white transition-colors cursor-pointer text-amber-600 hover:text-amber-700"
                     >
@@ -201,7 +201,7 @@ const FileCard = ({ file, onDelete, onTogglePublic, onDownload, onShareLink }) =
                     </button>
 
                     <button
-                        onClick={() => onTogglePublic(file)}
+                        onClick={() => onVisibilityChange(file)}
                         className="flex items-center gap-2 w-full px-3 py-2 hover:bg-gray-100 transition-colors"
                     >
                         {file.isPublic ? (

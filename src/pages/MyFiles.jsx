@@ -243,6 +243,7 @@ const MyFiles = () => {
                                 onTogglePublic={togglePublic}
                                 onDownload={handDownload}
                                 onShareLink={openShareModel}
+                                onVisibilityChange={openVisibilityConfirmation}
                             />
                         ))}
                     </div>
