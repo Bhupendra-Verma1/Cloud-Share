@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { LoaderCircle } from "lucide-react";
+import Spinner from './Spinner';
 
 /**
  * A reusable modal component for confirmation dialogs
@@ -135,11 +136,11 @@ const Modal = ({
                         onClick={handleConfirm}
                         disabled={isConfirming}
                         className={`px-4 py-2 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2
-        ${confirmButtonClass}
-        ${isConfirming ? "opacity-70 cursor-not-allowed" : ""}`}
+                        ${confirmButtonClass}
+                        ${isConfirming ? "opacity-70 cursor-not-allowed" : ""}`}
                     >
                         {isConfirming ? (
-                            <LoaderCircle className="animate-spin h-5 w-5 text-white mr-2" />
+                            <Spinner size={18} color="#ffffff" />
                         ) : (
                             confirmText
                         )}
