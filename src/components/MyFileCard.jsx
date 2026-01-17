@@ -1,5 +1,6 @@
 import { EllipsisVertical, Download, Trash2, Globe, Lock, Copy, Eye } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import Spinner from "./Spinner";
 
 const MyFileCard = ({
     file,
@@ -7,7 +8,9 @@ const MyFileCard = ({
     onDownload,
     onDelete,
     onTogglePublic,
-    onShareLink
+    onShareLink,
+    downloadingFileId,
+    downloadStage
 }) => {
     const [open, setOpen] = useState(false);
     const btnRef = useRef(null);
@@ -94,12 +97,23 @@ const MyFileCard = ({
                         </a>
                     )}
 
-                    <button
-                        onClick={() => onDownload(file)}
-                        className="flex items-center gap-2 w-full px-3 py-2 hover:bg-gray-100 transition-colors"
-                    >
-                        <Download size={16} /> Download
-                    </button>
+                    {downloadingFileId === file.id ? (
+                        <div className="flex items-center gap-2 w-full px-3 py-2 text-gray-500">
+                            <Spinner size={16} />
+                            <span className="text-sm">
+                                {downloadStage === "preparing"
+                                    ? "Preparing file…"
+                                    : "Downloading…"}
+                            </span>
+                        </div>
+                    ) : (
+                        <button
+                            onClick={() => onDownload(file)}
+                            className="flex items-center gap-2 w-full px-3 py-2 hover:bg-gray-100 transition-colors"
+                        >
+                            <Download size={16} /> Download
+                        </button>
+                    )}
 
                     <button
                         onClick={() => onTogglePublic(file)}

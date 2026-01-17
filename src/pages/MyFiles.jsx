@@ -10,12 +10,15 @@ import { apiEndpoints } from "../util/ApiEndpoint.js";
 import ConfirmationDialog from "../components/ConfirmationDialog";
 import LinkShareModal from "../components/LinkShareModal";
 import MyFileMobileView from "../components/MyFileMobileView";
+import Spinner from "../components/Spinner";
 
 const MyFiles = () => {
     const [files, setFiles] = useState([]);
     const [viewMode, setViewMode] = useState("list");
     const { getToken } = useAuth();
     const navigate = useNavigate();
+    const [downloadingFileId, setDownloadingFileId] = useState(null);
+    const [downloadStage, setDownloadStage] = useState(null);
 
     const [deleteConfirmation, setDeleteConfirmation] = useState({
         isOpen: false,
@@ -71,7 +74,10 @@ const MyFiles = () => {
     // handle file download
     const handDownload = async (file) => {
         try {
+            setDownloadingFileId(file.id);
+            setDownloadStage("preparing");
             const token = await getToken({ template: "backend" });
+            setDownloadStage("downloading");
             const response = await axios.get(apiEndpoints.DOWNLOAD_FILE(file.id), {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -92,6 +98,9 @@ const MyFiles = () => {
         } catch (error) {
             console.log('Download failed', error);
             toast.error('Download failed', error.message);
+        } finally {
+            setDownloadingFileId(null);
+            setDownloadStage(null);
         }
     }
 
@@ -244,6 +253,8 @@ const MyFiles = () => {
                                 onDownload={handDownload}
                                 onShareLink={openShareModel}
                                 onVisibilityChange={openVisibilityConfirmation}
+                                downloadingFileId={downloadingFileId}
+                                downloadStage={downloadStage}
                             />
                         ))}
                     </div>
@@ -313,14 +324,28 @@ const MyFiles = () => {
                                                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                                     <div className="grid grid-cols-3 gap-4">
                                                         <div className="flex justify-center">
-                                                            <button
-                                                                onClick={() => handDownload(file)}
-                                                                title="Download"
-                                                                className="text-gray-500 hover:text-blue-600"
-                                                            >
-                                                                <Download size={18} />
-                                                            </button>
+                                                            {downloadingFileId === file.id ? (
+                                                                <div
+                                                                    className="flex items-center justify-center w-[18px] h-[18px]"
+                                                                    title={
+                                                                        downloadStage === "preparing"
+                                                                            ? "Preparing file…"
+                                                                            : "Downloading…"
+                                                                    }
+                                                                >
+                                                                    <Spinner size={18} />
+                                                                </div>
+                                                            ) : (
+                                                                <button
+                                                                    onClick={() => handDownload(file)}
+                                                                    title="Download"
+                                                                    className="text-gray-500 hover:text-blue-600"
+                                                                >
+                                                                    <Download size={18} />
+                                                                </button>
+                                                            )}
                                                         </div>
+
                                                         <div className="flex justify-center">
                                                             <button
                                                                 onClick={() => openDeleteConfirmation(file.id)}
@@ -349,13 +374,15 @@ const MyFiles = () => {
 
                         {/* Mobile view */}
                         <div className="block md:hidden">
-                            <MyFileMobileView 
+                            <MyFileMobileView
                                 files={files}
                                 getFileIcon={getFileIcon}
                                 onDownload={handDownload}
                                 onDelete={openDeleteConfirmation}
                                 onTogglePublic={togglePublic}
                                 onShareLink={openShareModel}
+                                downloadingFileId={downloadingFileId}
+                                downloadStage={downloadStage}
                             />
                         </div>
                     </>

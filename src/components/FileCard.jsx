@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { FileIcon, FileText, Image, Music, Video, Globe, Lock, Copy, Eye, Download, Trash2, EllipsisVertical } from "lucide-react";
 import { useRef, useEffect } from "react";
+import Spinner from "./Spinner";
 
-const FileCard = ({ file, onDelete, onTogglePublic, onDownload, onShareLink, onVisibilityChange }) => {
+const FileCard = ({ file, onDelete, onTogglePublic, onDownload, onShareLink, onVisibilityChange, downloadingFileId, downloadStage }) => {
     const [showActions, setShowActions] = useState(false);
     const btnRef = useRef(null);
     const menuRef = useRef(null);
@@ -141,12 +142,32 @@ const FileCard = ({ file, onDelete, onTogglePublic, onDownload, onShareLink, onV
                     )}
 
                     <button
-                        onClick={() => onDownload(file)}
-                        title="Download"
-                        className="p-2 bg-white/90 rounded-full hover:bg-white transition-colors cursor-pointer text-green-600 hover:text-green-700"
+                        onClick={
+                            downloadingFileId === file.id
+                                ? undefined
+                                : () => onDownload(file)
+                        }
+                        title={
+                            downloadingFileId === file.id
+                                ? downloadStage === "preparing"
+                                    ? "Preparing file…"
+                                    : "Downloading…"
+                                : "Download"
+                        }
+                        disabled={downloadingFileId === file.id}
+                        className={`p-2 rounded-full transition-colors cursor-pointer
+                        ${downloadingFileId === file.id
+                                ? "bg-white/90 text-green-600"
+                                : "bg-white/90 hover:bg-white text-green-600 hover:text-green-700"
+                            }`}
                     >
-                        <Download size={18} />
+                        {downloadingFileId === file.id ? (
+                            <Spinner size={18} />
+                        ) : (
+                            <Download size={18} />
+                        )}
                     </button>
+
 
                     <button
                         onClick={() => onVisibilityChange(file)}
@@ -193,12 +214,24 @@ const FileCard = ({ file, onDelete, onTogglePublic, onDownload, onShareLink, onV
                         </a>
                     )}
 
-                    <button
-                        onClick={() => onDownload(file)}
-                        className="flex items-center gap-2 w-full px-3 py-2 hover:bg-gray-100 transition-colors"
-                    >
-                        <Download size={16} /> Download
-                    </button>
+                    {downloadingFileId === file.id ? (
+                        <div className="flex items-center gap-2 w-full px-3 py-2 text-gray-500">
+                            <Spinner size={16} />
+                            <span className="text-sm">
+                                {downloadStage === "preparing"
+                                    ? "Preparing file…"
+                                    : "Downloading…"}
+                            </span>
+                        </div>
+                    ) : (
+                        <button
+                            onClick={() => onDownload(file)}
+                            className="flex items-center gap-2 w-full px-3 py-2 hover:bg-gray-100 transition-colors"
+                        >
+                            <Download size={16} /> Download
+                        </button>
+                    )}
+
 
                     <button
                         onClick={() => onVisibilityChange(file)}

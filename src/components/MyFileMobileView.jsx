@@ -6,7 +6,9 @@ const MyFileMobileView = ({
     onDownload,
     onDelete,
     onTogglePublic,
-    onShareLink
+    onShareLink,
+    downloadingFileId,
+    downloadStage
 }) => {
     return (
         <div className="divide-y divide-gray-200 bg-white rounded-lg shadow">
@@ -19,6 +21,8 @@ const MyFileMobileView = ({
                     onDelete={onDelete}
                     onTogglePublic={onTogglePublic}
                     onShareLink={onShareLink}
+                    downloadingFileId={downloadingFileId}
+                    downloadStage={downloadStage}
                 />
             ))}
         </div>
